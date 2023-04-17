@@ -1,13 +1,11 @@
 class model {
   int id;
-  String? createdAt;
-
-  String? updatedAt;
-
+  DateTime createdAt;
+  DateTime updatedAt;
   String? fromTo;
   String? whereTo;
-  String? toGoDate;
-  String? returnDate;
+  DateTime toGoDate;
+  DateTime returnDate;
   String? airClass;
   int passenger;
   int userId;

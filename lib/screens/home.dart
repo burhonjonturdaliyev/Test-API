@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 import '../models/models.dart';
 
@@ -30,12 +31,12 @@ class _Home_pageState extends State<Home_page> {
             .map(
               (e) => model(
                   id: e["id"] as int,
-                  createdAt: e["createdAt"],
-                  updatedAt: e["updatedAt"],
+                  createdAt: DateTime.parse(e["createdAt"]),
+                  updatedAt: DateTime.parse(e["updatedAt"]),
                   fromTo: e["fromTo"],
                   whereTo: e["whereTo"],
-                  toGoDate: e["toGoDate"],
-                  returnDate: e["returnDate"],
+                  toGoDate: DateTime.parse(e["toGoDate"]),
+                  returnDate: DateTime.parse(e["returnDate"]),
                   airClass: e["airClass"],
                   passenger: e["passenger"] as int,
                   userId: e["userId"] as int),
@@ -68,6 +69,11 @@ class _Home_pageState extends State<Home_page> {
 
 Widget items(model models) {
   return Container(
-    child: Text("${models.id}"),
+    child: Column(
+      children: [
+        Text(DateFormat("HH:mm, MMMM, yyyy").format(models.toGoDate)),
+        Text("${models.id}"),
+      ],
+    ),
   );
 }
