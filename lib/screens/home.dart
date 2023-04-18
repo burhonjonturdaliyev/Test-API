@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
 
+import 'package:api_test/models/chat_models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+
 import 'package:intl/intl.dart';
 
 import '../models/models.dart';
@@ -16,39 +16,33 @@ class Home_page extends StatefulWidget {
 }
 
 class _Home_pageState extends State<Home_page> {
-  List<model> models = [];
+  List<chat_models> models = [];
   void fetchInfo() async {
     try {
       print("Loading started");
-      const uri = "http://185.196.213.43:7088/api/air/ticket/info";
+      const uri = "http://185.196.213.43:7088/chat";
       final url = Uri.parse(uri);
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final body = response.body;
+
         final json = jsonDecode(body);
+        print(json);
         final result = json["object"] as List<dynamic>;
-        final postes = result
+        final chates = result
             .map(
-              (e) => model(
+              (e) => chat_models(
                   id: e["id"] as int,
-                  createdAt: DateTime.parse(e["createdAt"]),
-                  updatedAt: DateTime.parse(e["updatedAt"]),
-                  fromTo: e["fromTo"],
-                  whereTo: e["whereTo"],
-                  toGoDate: DateTime.parse(e["toGoDate"]),
-                  returnDate: DateTime.parse(e["returnDate"]),
-                  airClass: e["airClass"],
-                  passenger: e["passenger"] as int,
-                  userId: e["userId"] as int),
+                  message: e["message"],
+                  username: e["username"],
+                  userId: e["userId"] as int,
+                  edited: e["edited"] as bool),
             )
             .toList();
         setState(() {
-          models = postes;
+          models = chates;
         });
-        print(body);
-      } else {
-        print("Error");
-      }
+      } else {}
     } catch (e) {
       print("Error occurred => $e");
     }
@@ -67,13 +61,10 @@ class _Home_pageState extends State<Home_page> {
   }
 }
 
-Widget items(model models) {
+Widget items(chat_models models) {
   return Container(
     child: Column(
-      children: [
-        Text(DateFormat("HH:mm, MMMM, yyyy").format(models.toGoDate)),
-        Text("${models.id}"),
-      ],
+      children: [Text(models.message)],
     ),
   );
 }
